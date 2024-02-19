@@ -11,7 +11,37 @@ describe('SessionService', () => {
     service = TestBed.inject(SessionService);
   });
 
-  it('should be created', () => {
-    expect(service).toBeTruthy();
+  it('should be connected', () => {
+    const user = {
+      token: 'Plop1234',
+      type: 'test_user_type',
+      username: 'Allan34',
+      firstName: 'Allan',
+      lastName: 'Mont',
+      id: 1,
+      admin: false,
+    };
+    
+    service.logIn(user);
+    expect(service.isLogged).toBe(true);
+    });
+
+  it('should be disconnected', () => {
+    service.logOut();
+    const user = {
+      token: 'Plop1234',
+      type: 'test_user_type',
+      username: 'Allan34',
+      firstName: 'Allan',
+      lastName: 'Mont',
+      id: 1,
+      admin: false,
+    };
+    
+    service.logIn(user);
+    service.logOut();
+
+    expect(service.isLogged).toBe(false);
   });
+  
 });
