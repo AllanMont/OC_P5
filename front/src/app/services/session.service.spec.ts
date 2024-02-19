@@ -23,6 +23,8 @@ describe('SessionService', () => {
     };
     
     service.logIn(user);
+    service.sessionInformation = user;
+    
     expect(service.isLogged).toBe(true);
     });
 
@@ -43,5 +45,6 @@ describe('SessionService', () => {
 
     expect(service.isLogged).toBe(false);
   });
+
   
 });
