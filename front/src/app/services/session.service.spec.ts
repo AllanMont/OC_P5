@@ -46,5 +46,7 @@ describe('SessionService', () => {
     expect(service.isLogged).toBe(false);
   });
 
-  
+  it('should be observable', () => {
+      expect(service.$isLogged).toBeTruthy();
+  })
 });
