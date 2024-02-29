@@ -35,4 +35,12 @@ describe('Register spec', () => {
   
       cy.url().should('include', '/sessions')
     })
+
+    it('Login required fields' , () => {
+      cy.visit('/register')
+  
+      cy.get('input[formControlName=email]').type("yoga@studio.com")
+  
+      cy.get('.mat-raised-button').should('be.disabled')
+    })
   })
