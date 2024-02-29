@@ -1,84 +1,53 @@
-describe('sessions', () => {
-  beforeEach(() => {
-    cy.visit('/login')
+beforeEach(() => {
+  cy.visit('/login')
 
-    cy.get('input[formControlName=email]').type("yoga@studio.com")
-    cy.get('input[formControlName=password]').type(`${"test!1234"}{enter}{enter}`)
-  })
+  cy.get('input[formControlName=email]').type("yoga@studio.com")
+  cy.get('input[formControlName=password]').type(`${"test!1234"}{enter}{enter}`)
+})
+
+describe('sessions', () => {
+
+})
+
+describe('create session', () => {
 
   it('create session', () => {
-      cy.intercept(
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/teacher',
+      },
+      [
         {
-          method: 'GET',
-          url: '/api/teacher',
-        },
-        [
-          {
-            id: 1,
-            lastName: 'DELAHAYE',
-            firstName: 'Margot',
-            createdAt: '2024-01-01 01:01:01',
-            updatedAt: '2024-01-01 01:01:02',
-          },
-          {
-            id: 2,
-            lastName: 'THIERCELIN',
-            firstName: 'Hélène',
-            createdAt: '2024-02-02 02:02:02',
-            updatedAt: '2024-02-02 02:02:02',
-          },
-        ]
-      ).as('teacher');
-  
-      cy.intercept('POST', '/api/session', {
-        body: [{
           id: 1,
-          name: 'Nouvelle session Test',
-          date: '2024-02-29',
-          teacher_id: 1,
-          description: 'Session de découverte',
-          users: [],
-          createdAt: '2024-02-29',
-          updatedAt: '2024-02-29',
-        }],
-      });
-  
-      cy.intercept(
-        {
-          method: 'GET',
-          url: '/api/session',
+          lastName: 'DELAHAYE',
+          firstName: 'Margot',
+          createdAt: '2024-01-01 01:01:01',
+          updatedAt: '2024-01-01 01:01:02',
         },
-        [
-          {
-            id: 1,
-            name: 'Nouvelle session Test',
-            date: '2024-02-29',
-            teacher_id: 1,
-            description: 'Session de découverte',
-            users: [],
-            createdAt: '2024-02-29',
-            updatedAt: '2024-02-29',
-          },
-        ]
-      ).as('session');
-  
-      cy.get('button[routerLink="create"]').click();
-  
-      cy.url().should('include', '/sessions/create');
+        {
+          id: 2,
+          lastName: 'THIERCELIN',
+          firstName: 'Hélène',
+          createdAt: '2024-02-02 02:02:02',
+          updatedAt: '2024-02-02 02:02:02',
+        },
+      ]
+    ).as('teacher');
 
-      cy.get('input[formControlName=name]').type("Nouvelle session Test");
-      cy.get('input[formControlName=date]').type("2024-02-29");
-      
-      cy.get('mat-select').click();
-      cy.get('mat-option').contains('Margot DELAHAYE').click();
-      
-      cy.get('textarea[formControlName=description]').type("Session de découverte");
-      cy.get('button[type=submit]').click();
+    cy.intercept('POST', '/api/session', {
+      body: [{
+        id: 1,
+        name: 'Nouvelle session Test',
+        date: '2024-02-29',
+        teacher_id: 1,
+        description: 'Session de découverte',
+        users: [],
+        createdAt: '2024-02-29',
+        updatedAt: '2024-02-29',
+      }],
+    });
 
-      cy.url().should('include', '/sessions');
-  })
-
-  it('delete session', () => {
     cy.intercept(
       {
         method: 'GET',
@@ -98,57 +67,24 @@ describe('sessions', () => {
       ]
     ).as('session');
 
-    cy.intercept(
-      {
-        method: 'GET', 
-        url: '/api/session/1'
-      }, 
-        {
-          id: 1,
-          name: 'Nouvelle session Test',
-          date: '2024-02-29',
-          teacher_id: 1,
-          description: 'Session de découverte',
-          users: [],
-          createdAt: '2024-02-29',
-          updatedAt: '2024-02-29',
-        }
-    ).as('sessionInfo1');
+    cy.get('button[routerLink="create"]').click();
 
-    cy.intercept(
-      {
-        method: 'GET',
-        url: '/api/teacher/1',
-      },
-      [
-        {
-          id: 1,
-          lastName: 'DELAHAYE',
-          firstName: 'Margot',
-          createdAt: '2024-01-01 01:01:01',
-          updatedAt: '2024-01-01 01:01:02',
-        },
-      ]
-    ).as('teacher');
+    cy.url().should('include', '/sessions/create');
 
-    cy.intercept('DELETE', '/api/session/1', {
-      body: {
-        id: 1,
-        name: 'Nouvelle session Test',
-        date: '2024-02-29',
-        teacher_id: 1,
-        description: 'Session de découverte',
-        users: [],
-        createdAt: '2024-02-29',
-        updatedAt: '2024-02-29',
-      },
-    });
+    cy.get('input[formControlName=name]').type("Nouvelle session Test");
+    cy.get('input[formControlName=date]').type("2024-02-29");
+    
+    cy.get('mat-select').click();
+    cy.get('mat-option').contains('Margot DELAHAYE').click();
+    
+    cy.get('textarea[formControlName=description]').type("Session de découverte");
+    cy.get('button[type=submit]').click();
 
-    cy.get('[ng-reflect-router-link="detail,1"]').click();
+    cy.url().should('include', '/sessions');
+})
+})
 
-    cy.get(':nth-child(2) > .mat-focus-indicator').click();
-  })
-
+describe('update session', () => {
   it('update session', () => {
     cy.intercept(
       {
@@ -237,4 +173,78 @@ describe('sessions', () => {
 
       
   })
+})
+
+describe('update session', () => {
+  it('delete session', () => {
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/session',
+      },
+      [
+        {
+          id: 1,
+          name: 'Nouvelle session Test',
+          date: '2024-02-29',
+          teacher_id: 1,
+          description: 'Session de découverte',
+          users: [],
+          createdAt: '2024-02-29',
+          updatedAt: '2024-02-29',
+        },
+      ]
+    ).as('session');
+
+    cy.intercept(
+      {
+        method: 'GET', 
+        url: '/api/session/1'
+      }, 
+        {
+          id: 1,
+          name: 'Nouvelle session Test',
+          date: '2024-02-29',
+          teacher_id: 1,
+          description: 'Session de découverte',
+          users: [],
+          createdAt: '2024-02-29',
+          updatedAt: '2024-02-29',
+        }
+    ).as('sessionInfo1');
+
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/teacher/1',
+      },
+      [
+        {
+          id: 1,
+          lastName: 'DELAHAYE',
+          firstName: 'Margot',
+          createdAt: '2024-01-01 01:01:01',
+          updatedAt: '2024-01-01 01:01:02',
+        },
+      ]
+    ).as('teacher');
+
+    cy.intercept('DELETE', '/api/session/1', {
+      body: {
+        id: 1,
+        name: 'Nouvelle session Test',
+        date: '2024-02-29',
+        teacher_id: 1,
+        description: 'Session de découverte',
+        users: [],
+        createdAt: '2024-02-29',
+        updatedAt: '2024-02-29',
+      },
+    });
+
+    cy.get('[ng-reflect-router-link="detail,1"]').click();
+
+    cy.get(':nth-child(2) > .mat-focus-indicator').click();
+  })
+
 })
