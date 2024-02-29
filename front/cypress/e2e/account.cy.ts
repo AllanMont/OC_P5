@@ -43,7 +43,7 @@ describe('Login spec', () => {
     cy.get('.mat-raised-button').should('be.disabled')
   })
 
-  it.only('display info user', () => {
+  it('display info user', () => {
     cy.visit('/login')
     
     cy.get('input[formControlName=email]').type("yoga@studio.com")
