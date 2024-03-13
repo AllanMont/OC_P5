@@ -39,7 +39,26 @@ describe('MeComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  it('should create component', () => {
     expect(component).toBeTruthy();
+  }
+  );
+
+  it('should call back', () => {
+    const spy = jest.spyOn(window.history, 'back');
+    component.back();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should call delete', () => {
+    const spy = jest.spyOn(window.history, 'back');
+    component.delete();
+    expect(spy).toHaveBeenCalled();
+  });
+
+  it('should call ngOnInit', () => {
+    const spy = jest.spyOn(component.userService, 'getById');
+    component.ngOnInit();
+    expect(spy).toHaveBeenCalled();
   });
 });

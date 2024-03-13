@@ -53,7 +53,25 @@ describe('FormComponent', () => {
     fixture.detectChanges();
   });
 
-  it('should create', () => {
+  beforeEach(() => {
+    fixture = TestBed.createComponent(FormComponent);
+    component = fixture.componentInstance;
+    fixture.detectChanges();
+  });
+
+  it('should create the component', () => {
     expect(component).toBeTruthy();
+  });
+
+  it('should initialize form for create session', () => {
+    expect(component.onUpdate).toBeFalsy();
+    expect(component.sessionForm).toBeDefined();
+
+    component.ngOnInit();
+
+    expect(component.sessionForm?.get('name')).toBeTruthy();
+    expect(component.sessionForm?.get('date')).toBeTruthy();
+    expect(component.sessionForm?.get('teacher_id')).toBeTruthy();
+    expect(component.sessionForm?.get('description')).toBeTruthy();
   });
 });
