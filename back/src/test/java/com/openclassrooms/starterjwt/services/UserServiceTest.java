@@ -1,4 +1,4 @@
-package com.openclassrooms.services;
+package com.openclassrooms.starterjwt.services;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
