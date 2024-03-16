@@ -12,6 +12,7 @@ describe('Login spec', () => {
 
     cy.get('input[formControlName=email]').type("yoga@studio.com")
     cy.get('input[formControlName=password]').type(`${"test!1234"}{enter}{enter}`)
+    cy.wait('@session')
 
     cy.url().should('include', '/sessions')
   })
@@ -26,6 +27,14 @@ describe('Login spec', () => {
   })
 
   it('Logout', () => {
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/session',
+      },
+      []).as('session')
+        
+
     cy.visit('/login')
 
     cy.get('input[formControlName=email]').type("yoga@studio.com")
@@ -45,6 +54,19 @@ describe('Login spec', () => {
   })
 
   it('display info user', () => {
+    const currentDate = new Date().toLocaleDateString('en-US', {
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric'
+    });
+
+    cy.intercept(
+      {
+        method: 'GET',
+        url: '/api/session',
+      },
+      []).as('session')
+
     cy.visit('/login')
     
     cy.get('input[formControlName=email]').type("yoga@studio.com")
@@ -57,8 +79,8 @@ describe('Login spec', () => {
 
     cy.get('.mat-card-content > div.ng-star-inserted > :nth-child(3)').should('contain', 'admin')
 
-    cy.get('.p2 :nth-child(1)').should('contain', 'February 18, 2024')
-    cy.get('.p2 :nth-child(2)').should('contain', 'February 18, 2024')
+    cy.get('.p2 :nth-child(1)').should('contain', currentDate)
+    cy.get('.p2 :nth-child(2)').should('contain', currentDate)
 
   })
 })
